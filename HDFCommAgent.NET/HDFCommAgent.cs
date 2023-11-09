@@ -604,32 +604,32 @@ namespace HDFCommAgent.NET
             return ocx.CommMiCheFoForAcc(sAcctNo, sAcctPw);
         }
 
-        public virtual int Transact(int hWnd, int nTRID, string sTrCode, string sInput, int nInput, int nHeadType, int nAccountIndex)
-        {
-            if (ocx == null)
-            {
-                throw new InvalidActiveXStateException("Transact", ActiveXInvokeKind.MethodInvoke);
-            }
-            return ocx.Transact(hWnd, nTRID, sTrCode, sInput, nInput, nHeadType, nAccountIndex);
-        }
+        //public virtual int Transact(int hWnd, int nTRID, string sTrCode, string sInput, int nInput, int nHeadType, int nAccountIndex)
+        //{
+        //    if (ocx == null)
+        //    {
+        //        throw new InvalidActiveXStateException("Transact", ActiveXInvokeKind.MethodInvoke);
+        //    }
+        //    return ocx.Transact(hWnd, nTRID, sTrCode, sInput, nInput, nHeadType, nAccountIndex);
+        //}
 
-        public virtual int Attach(int hWnd, string szBCType, string szInput, int nCodeLen, int nInputLen)
-        {
-            if (ocx == null)
-            {
-                throw new InvalidActiveXStateException("Attach", ActiveXInvokeKind.MethodInvoke);
-            }
-            return ocx.Attach(hWnd, szBCType, szInput, nCodeLen, nInputLen);
-        }
+        //public virtual int Attach(int hWnd, string szBCType, string szInput, int nCodeLen, int nInputLen)
+        //{
+        //    if (ocx == null)
+        //    {
+        //        throw new InvalidActiveXStateException("Attach", ActiveXInvokeKind.MethodInvoke);
+        //    }
+        //    return ocx.Attach(hWnd, szBCType, szInput, nCodeLen, nInputLen);
+        //}
 
-        public virtual int Detach(int hWnd, string szBCType, string szInput, int nCodeLen, int nInputLen)
-        {
-            if (ocx == null)
-            {
-                throw new InvalidActiveXStateException("Detach", ActiveXInvokeKind.MethodInvoke);
-            }
-            return ocx.Detach(hWnd, szBCType, szInput, nCodeLen, nInputLen);
-        }
+        //public virtual int Detach(int hWnd, string szBCType, string szInput, int nCodeLen, int nInputLen)
+        //{
+        //    if (ocx == null)
+        //    {
+        //        throw new InvalidActiveXStateException("Detach", ActiveXInvokeKind.MethodInvoke);
+        //    }
+        //    return ocx.Detach(hWnd, szBCType, szInput, nCodeLen, nInputLen);
+        //}
 
         public virtual string CommGetDealNo(string sAcctNo)
         {

@@ -5,7 +5,7 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<Description>Common wrapper for SI Api</Description>
-		<Version>0.1.0-prev</Version>
+		<Version>0.1.1-prev</Version>
 		<Title>HDFCommAgent.NET</Title>
 		<PackageTags>SI, EZ</PackageTags>
 		<Authors>teranum</Authors>
