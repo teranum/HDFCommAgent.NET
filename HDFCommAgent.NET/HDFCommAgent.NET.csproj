@@ -5,20 +5,26 @@
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<PlatformTarget>AnyCPU</PlatformTarget>
 		<Description>Common wrapper for SI Api</Description>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<Title>HDFCommAgent.NET</Title>
 		<PackageTags>SI, EZ</PackageTags>
 		<Authors>teranum</Authors>
 		<Copyright>Copyright © teranum 2023</Copyright>
+		<RepositoryUrl>https://github.com/teranum/HDFCommAgent.NET</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 		<PackageProjectUrl>https://github.com/teranum/HDFCommAgent.NET</PackageProjectUrl>
 		<PackageIcon>icon.jpg</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<Company>$(Authors)</Company>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<NoWarn>MA0048;MA0046</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<None Include="icon.jpg">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="README.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>

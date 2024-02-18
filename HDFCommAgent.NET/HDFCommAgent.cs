@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -179,86 +180,38 @@ namespace HDFCommAgent.NET
         void OnGetMsgWithRqId(int nRqId, [MarshalAs(UnmanagedType.BStr)] string sCode, [MarshalAs(UnmanagedType.BStr)] string sMsg);
     }
 
-    public class _DHDFCommAgentEvents_OnDataRecvEvent
+    public class _DHDFCommAgentEvents_OnDataRecvEvent(string sTrCode, int nRqId) : EventArgs
     {
-        public string sTrCode;
-
-        public int nRqId;
-
-        public _DHDFCommAgentEvents_OnDataRecvEvent(string sTrCode, int nRqId)
-        {
-            this.sTrCode = sTrCode;
-            this.nRqId = nRqId;
-        }
+        public string sTrCode = sTrCode;
+        public int nRqId = nRqId;
     }
-    public class _DHDFCommAgentEvents_OnGetBroadDataEvent
+    public class _DHDFCommAgentEvents_OnGetBroadDataEvent(string sJongmokCode, int nRealType) : EventArgs
     {
-        public string sJongmokCode;
-
-        public int nRealType;
-
-        public _DHDFCommAgentEvents_OnGetBroadDataEvent(string sJongmokCode, int nRealType)
-        {
-            this.sJongmokCode = sJongmokCode;
-            this.nRealType = nRealType;
-        }
+        public string sJongmokCode = sJongmokCode;
+        public int nRealType = nRealType;
     }
-    public class _DHDFCommAgentEvents_OnGetDataEvent
+    public class _DHDFCommAgentEvents_OnGetDataEvent(int nType, int wParam, int lParam) : EventArgs
     {
-        public int nType;
-
-        public int wParam;
-
-        public int lParam;
-
-        public _DHDFCommAgentEvents_OnGetDataEvent(int nType, int wParam, int lParam)
-        {
-            this.nType = nType;
-            this.wParam = wParam;
-            this.lParam = lParam;
-        }
+        public int nType = nType;
+        public int wParam = wParam;
+        public int lParam = lParam;
     }
-    public class _DHDFCommAgentEvents_OnGetMsgEvent
+    public class _DHDFCommAgentEvents_OnGetMsgEvent(string sCode, string sMsg) : EventArgs
     {
-        public string sCode;
-
-        public string sMsg;
-
-        public _DHDFCommAgentEvents_OnGetMsgEvent(string sCode, string sMsg)
-        {
-            this.sCode = sCode;
-            this.sMsg = sMsg;
-        }
+        public string sCode = sCode;
+        public string sMsg = sMsg;
     }
-    public class _DHDFCommAgentEvents_OnGetMsgWithRqIdEvent
+    public class _DHDFCommAgentEvents_OnGetMsgWithRqIdEvent(int nRqId, string sCode, string sMsg) : EventArgs
     {
-        public int nRqId;
-
-        public string sCode;
-
-        public string sMsg;
-
-        public _DHDFCommAgentEvents_OnGetMsgWithRqIdEvent(int nRqId, string sCode, string sMsg)
-        {
-            this.nRqId = nRqId;
-            this.sCode = sCode;
-            this.sMsg = sMsg;
-        }
+        public int nRqId = nRqId;
+        public string sCode = sCode;
+        public string sMsg = sMsg;
     }
-    public class _DHDFCommAgentEvents_OnRealDataEvent
+    public class _DHDFCommAgentEvents_OnRealDataEvent(int nType, int wParam, int lParam) : EventArgs
     {
-        public int nType;
-
-        public int wParam;
-
-        public int lParam;
-
-        public _DHDFCommAgentEvents_OnRealDataEvent(int nType, int wParam, int lParam)
-        {
-            this.nType = nType;
-            this.wParam = wParam;
-            this.lParam = lParam;
-        }
+        public int nType = nType;
+        public int wParam = wParam;
+        public int lParam = lParam;
     }
 
     public delegate void _DHDFCommAgentEvents_OnDataRecvEventHandler(object sender, _DHDFCommAgentEvents_OnDataRecvEvent e);
@@ -270,118 +223,26 @@ namespace HDFCommAgent.NET
 
 
     [ClassInterface(ClassInterfaceType.None)]
-    public class AxHDFCommAgentEventMulticaster : _DHDFCommAgentEvents
+    public class AxHDFCommAgentEventMulticaster(AxHDFCommAgent parent) : _DHDFCommAgentEvents
     {
-        private AxHDFCommAgent parent;
+        private readonly AxHDFCommAgent parent = parent;
 
-        public AxHDFCommAgentEventMulticaster(AxHDFCommAgent parent)
-        {
-            this.parent = parent;
-        }
+        public virtual void OnGetData(int nType, int wParam, int lParam) => parent.RaiseOnOnGetData(parent, new(nType, wParam, lParam));
 
-        public virtual void OnGetData(int nType, int wParam, int lParam)
-        {
-            _DHDFCommAgentEvents_OnGetDataEvent e = new _DHDFCommAgentEvents_OnGetDataEvent(nType, wParam, lParam);
-            parent.RaiseOnOnGetData(parent, e);
-        }
+        public virtual void OnRealData(int nType, int wParam, int lParam) => parent.RaiseOnOnRealData(parent, new(nType, wParam, lParam));
 
-        public virtual void OnRealData(int nType, int wParam, int lParam)
-        {
-            _DHDFCommAgentEvents_OnRealDataEvent e = new _DHDFCommAgentEvents_OnRealDataEvent(nType, wParam, lParam);
-            parent.RaiseOnOnRealData(parent, e);
-        }
+        public virtual void OnDataRecv(string sTrCode, int nRqId) => parent.RaiseOnOnDataRecv(parent, new(sTrCode, nRqId));
 
-        public virtual void OnDataRecv(string sTrCode, int nRqId)
-        {
-            _DHDFCommAgentEvents_OnDataRecvEvent e = new _DHDFCommAgentEvents_OnDataRecvEvent(sTrCode, nRqId);
-            parent.RaiseOnOnDataRecv(parent, e);
-        }
+        public virtual void OnGetBroadData(string sJongmokCode, int nRealType) => parent.RaiseOnOnGetBroadData(parent, new(sJongmokCode, nRealType));
 
-        public virtual void OnGetBroadData(string sJongmokCode, int nRealType)
-        {
-            _DHDFCommAgentEvents_OnGetBroadDataEvent e = new _DHDFCommAgentEvents_OnGetBroadDataEvent(sJongmokCode, nRealType);
-            parent.RaiseOnOnGetBroadData(parent, e);
-        }
+        public virtual void OnGetMsg(string sCode, string sMsg) => parent.RaiseOnOnGetMsg(parent, new(sCode, sMsg));
 
-        public virtual void OnGetMsg(string sCode, string sMsg)
-        {
-            _DHDFCommAgentEvents_OnGetMsgEvent e = new _DHDFCommAgentEvents_OnGetMsgEvent(sCode, sMsg);
-            parent.RaiseOnOnGetMsg(parent, e);
-        }
-
-        public virtual void OnGetMsgWithRqId(int nRqId, string sCode, string sMsg)
-        {
-            _DHDFCommAgentEvents_OnGetMsgWithRqIdEvent e = new _DHDFCommAgentEvents_OnGetMsgWithRqIdEvent(nRqId, sCode, sMsg);
-            parent.RaiseOnOnGetMsgWithRqId(parent, e);
-        }
+        public virtual void OnGetMsgWithRqId(int nRqId, string sCode, string sMsg) => parent.RaiseOnOnGetMsgWithRqId(parent, new(nRqId, sCode, sMsg));
     }
 
 
     public class AxHDFCommAgent
     {
-        [DllImport("Atl.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern bool AtlAxWinInit();
-        [DllImport("Atl.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern int AtlAxGetControl(IntPtr h, [MarshalAs(UnmanagedType.IUnknown)] out object pp);
-        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern IntPtr CreateWindowEx(int dwExStyle, string lpClassName, string lpWindowName, int dwStyle, int x, int y, int nWidth, int nHeight, IntPtr hWndParent, IntPtr hMenu, IntPtr hInstance, IntPtr lpParam);
-        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        private static extern bool DestroyWindow(IntPtr hWnd);
-
-        private const int WS_VISIBLE = 0x10000000;
-        private const int WS_CHILD = 0x40000000;
-
-        private IntPtr hWndContainer = IntPtr.Zero;
-
-        private _DHDFCommAgent ocx;
-        private System.Runtime.InteropServices.ComTypes.IConnectionPoint _pConnectionPoint;
-        private int _nCookie = 0;
-        private bool bInitialized = false;
-
-        public bool Created => bInitialized;
-
-        public AxHDFCommAgent(IntPtr hWndParent)
-        {
-            string clsid = "{2a7b5bef-49ee-4219-9833-db04d07876cf}";
-            if (!bInitialized)
-            {
-                if (AtlAxWinInit())
-                {
-                    hWndContainer = CreateWindowEx(0, "AtlAxWin", clsid, WS_VISIBLE | WS_CHILD, -100, -100, 0, 0, hWndParent, (IntPtr)9001, IntPtr.Zero, IntPtr.Zero);
-                    if (hWndContainer != IntPtr.Zero)
-                    {
-                        try
-                        {
-                            object pUnknown;
-                            AtlAxGetControl(hWndContainer, out pUnknown);
-                            if (pUnknown != null)
-                            {
-                                ocx = (_DHDFCommAgent)pUnknown;
-                                if (ocx != null)
-                                {
-                                    Guid guidEvents = typeof(_DHDFCommAgentEvents).GUID;
-                                    System.Runtime.InteropServices.ComTypes.IConnectionPointContainer pConnectionPointContainer;
-                                    pConnectionPointContainer = (System.Runtime.InteropServices.ComTypes.IConnectionPointContainer)pUnknown;
-                                    pConnectionPointContainer.FindConnectionPoint(ref guidEvents, out _pConnectionPoint);
-                                    if (_pConnectionPoint != null)
-                                    {
-                                        AxHDFCommAgentEventMulticaster pEventSink = new AxHDFCommAgentEventMulticaster(this);
-                                        _pConnectionPoint.Advise(pEventSink, out _nCookie);
-                                        bInitialized = true;
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            DestroyWindow(hWndContainer);
-                            hWndContainer = IntPtr.Zero;
-                        }
-                    }
-                }
-            }
-        }
-
         public event _DHDFCommAgentEvents_OnGetDataEventHandler OnGetData;
 
         public event _DHDFCommAgentEvents_OnRealDataEventHandler OnRealData;
@@ -394,53 +255,17 @@ namespace HDFCommAgent.NET
 
         public event _DHDFCommAgentEvents_OnGetMsgWithRqIdEventHandler OnGetMsgWithRqId;
 
-        internal void RaiseOnOnGetData(object sender, _DHDFCommAgentEvents_OnGetDataEvent e)
-        {
-            if (this.OnGetData != null)
-            {
-                this.OnGetData(sender, e);
-            }
-        }
+        internal void RaiseOnOnGetData(object sender, _DHDFCommAgentEvents_OnGetDataEvent e) => OnGetData?.Invoke(this, e);
 
-        internal void RaiseOnOnRealData(object sender, _DHDFCommAgentEvents_OnRealDataEvent e)
-        {
-            if (this.OnRealData != null)
-            {
-                this.OnRealData(sender, e);
-            }
-        }
+        internal void RaiseOnOnRealData(object sender, _DHDFCommAgentEvents_OnRealDataEvent e) => OnRealData?.Invoke(this, e);
 
-        internal void RaiseOnOnDataRecv(object sender, _DHDFCommAgentEvents_OnDataRecvEvent e)
-        {
-            if (this.OnDataRecv != null)
-            {
-                this.OnDataRecv(sender, e);
-            }
-        }
+        internal void RaiseOnOnDataRecv(object sender, _DHDFCommAgentEvents_OnDataRecvEvent e) => OnDataRecv?.Invoke(this, e);
 
-        internal void RaiseOnOnGetBroadData(object sender, _DHDFCommAgentEvents_OnGetBroadDataEvent e)
-        {
-            if (this.OnGetBroadData != null)
-            {
-                this.OnGetBroadData(sender, e);
-            }
-        }
+        internal void RaiseOnOnGetBroadData(object sender, _DHDFCommAgentEvents_OnGetBroadDataEvent e) => OnGetBroadData?.Invoke(this, e);
 
-        internal void RaiseOnOnGetMsg(object sender, _DHDFCommAgentEvents_OnGetMsgEvent e)
-        {
-            if (this.OnGetMsg != null)
-            {
-                this.OnGetMsg(sender, e);
-            }
-        }
+        internal void RaiseOnOnGetMsg(object sender, _DHDFCommAgentEvents_OnGetMsgEvent e) => OnGetMsg?.Invoke(this, e);
 
-        internal void RaiseOnOnGetMsgWithRqId(object sender, _DHDFCommAgentEvents_OnGetMsgWithRqIdEvent e)
-        {
-            if (this.OnGetMsgWithRqId != null)
-            {
-                this.OnGetMsgWithRqId(sender, e);
-            }
-        }
+        internal void RaiseOnOnGetMsgWithRqId(object sender, _DHDFCommAgentEvents_OnGetMsgWithRqIdEvent e) => OnGetMsgWithRqId?.Invoke(this, e);
 
         //public virtual void AboutBox()
         //{
@@ -734,31 +559,91 @@ namespace HDFCommAgent.NET
         {
             MethodInvoke,
             PropertyGet,
-            PropertySet
+            PropertySet,
         }
-        public class InvalidActiveXStateException : Exception
+        public class InvalidActiveXStateException(string name, ActiveXInvokeKind kind) : Exception
         {
-            private readonly string name;
-            private readonly ActiveXInvokeKind kind;
-
-            public InvalidActiveXStateException(string name, ActiveXInvokeKind kind)
-            {
-                this.name = name;
-                this.kind = kind;
-            }
+            private readonly string name = name;
+            private readonly ActiveXInvokeKind kind = kind;
 
             public override string ToString()
             {
-                switch (kind)
+                return kind switch
                 {
-                    case ActiveXInvokeKind.MethodInvoke:
-                        return string.Format("AXInvalidMethodInvoke {0}", name);
-                    case ActiveXInvokeKind.PropertyGet:
-                        return string.Format("AXInvalidPropertyGet {0}", name);
-                    case ActiveXInvokeKind.PropertySet:
-                        return string.Format("AXInvalidPropertySet {0}", name);
-                    default:
-                        return base.ToString();
+                    ActiveXInvokeKind.MethodInvoke => string.Format("AXInvalidMethodInvoke {0}", name),
+                    ActiveXInvokeKind.PropertyGet => string.Format("AXInvalidPropertyGet {0}", name),
+                    ActiveXInvokeKind.PropertySet => string.Format("AXInvalidPropertySet {0}", name),
+                    _ => base.ToString(),
+                };
+            }
+        }
+
+        [DllImport("Atl.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern bool AtlAxWinInit();
+        [DllImport("Atl.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern int AtlAxGetControl(IntPtr h, [MarshalAs(UnmanagedType.IUnknown)] out object pp);
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern IntPtr CreateWindowEx(int dwExStyle, string lpClassName, string lpWindowName, int dwStyle, int x, int y, int nWidth, int nHeight, IntPtr hWndParent, IntPtr hMenu, IntPtr hInstance, IntPtr lpParam);
+        [DllImport("User32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern bool DestroyWindow(IntPtr hWnd);
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr GetConsoleWindow();
+
+        private const int WS_VISIBLE = 0x10000000;
+        private const int WS_CHILD = 0x40000000;
+
+        private readonly IntPtr hWndContainer = IntPtr.Zero;
+
+        private readonly _DHDFCommAgent ocx;
+        private readonly System.Runtime.InteropServices.ComTypes.IConnectionPoint _pConnectionPoint;
+        private readonly bool bInitialized = false;
+
+        public bool Created => bInitialized;
+
+        public AxHDFCommAgent(nint hWndParent = 0)
+        {
+            if (hWndParent == IntPtr.Zero)
+            {
+                hWndParent = Process.GetCurrentProcess().MainWindowHandle;
+                if (hWndParent == IntPtr.Zero)
+                {
+                    hWndParent = GetConsoleWindow();
+                }
+            }
+
+            string clsid = "{2a7b5bef-49ee-4219-9833-db04d07876cf}";
+
+            if (AtlAxWinInit())
+            {
+                hWndContainer = CreateWindowEx(0, "AtlAxWin", clsid, WS_VISIBLE | WS_CHILD, -100, -100, 0, 0, hWndParent, (IntPtr)9003, IntPtr.Zero, IntPtr.Zero);
+                if (hWndContainer != IntPtr.Zero)
+                {
+                    try
+                    {
+                        AtlAxGetControl(hWndContainer, out object pUnknown);
+                        if (pUnknown != null)
+                        {
+                            ocx = (_DHDFCommAgent)pUnknown;
+                            if (ocx != null)
+                            {
+                                Guid guidEvents = typeof(_DHDFCommAgentEvents).GUID;
+                                System.Runtime.InteropServices.ComTypes.IConnectionPointContainer pConnectionPointContainer;
+                                pConnectionPointContainer = (System.Runtime.InteropServices.ComTypes.IConnectionPointContainer)pUnknown;
+                                pConnectionPointContainer.FindConnectionPoint(ref guidEvents, out _pConnectionPoint);
+                                if (_pConnectionPoint != null)
+                                {
+                                    AxHDFCommAgentEventMulticaster pEventSink = new(this);
+                                    _pConnectionPoint.Advise(pEventSink, out int nCookie);
+                                    bInitialized = true;
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        DestroyWindow(hWndContainer);
+                        hWndContainer = IntPtr.Zero;
+                    }
                 }
             }
         }
